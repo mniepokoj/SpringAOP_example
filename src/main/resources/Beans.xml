@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+          http://www.springframework.org/schema/aop
+          http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+    <bean id="userService" class="com.example.UserService"/>
+    <bean id="userAspect" class="com.example.UserAspect"/>
+
+    <aop:config>
+        <aop:aspect id="userLoggingAspect" ref="userAspect">
+            <aop:pointcut id="userServiceCreateUserPointcut" expression="execution(* com.example.UserService.createUser(..))  &amp;&amp; args(user)"/>
+            <aop:before method="beforeCreateUser" pointcut-ref="userServiceCreateUserPointcut"/>
+            <aop:after-returning method="afterCreateUser" pointcut-ref="userServiceCreateUserPointcut"/>
+        </aop:aspect>
+        <aop:aspect id="userLoggingAspect" ref="userAspect">
+            <aop:pointcut id="userServiceUpdateUserPointcut" expression="execution(* com.example.UserService.updateUser(..))  &amp;&amp; args(user)"/>
+            <aop:before method="beforeUpdateUser" pointcut-ref="userServiceUpdateUserPointcut"/>
+            <aop:after-returning method="afterCreateUser" pointcut-ref="userServiceUpdateUserPointcut"/>
+        </aop:aspect>
+        <aop:aspect id="userLoggingAspect" ref="userAspect">
+            <aop:pointcut id="userServiceDeletePointcut" expression="execution(* com.example.UserService.*(..))  &amp;&amp; args(userId)"/>
+            <aop:before method="beforeDeleteUser" pointcut-ref="userServiceDeletePointcut"/>
+            <aop:after-returning method="afterDeleteUser" pointcut-ref="userServiceDeletePointcut"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
